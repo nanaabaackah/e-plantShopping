@@ -1,13 +1,20 @@
 import React, { useState,useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from './CartSlice';
 
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-    const [addedToCart, setAddedToCart] = useState({});
+    const [cart, setCart] = useState([]);
+    const dispatch = useDispatch();
+    const cartItems=useSelector(state => state.cart.items);
+    useEffect(() => {}, []);
 
+    const alreadyInCart = (itemName) => {
+        return cartItems.some((item) => item.name === itemName);
+    }
     const handleAddToCart = (product) => {
         dispatch(addItem(product));
         setAddedToCart((prevState) => ({
@@ -15,6 +22,10 @@ function ProductList() {
            [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
          }));
     };
+
+    const totalItems = () => {
+        return cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
 
     const plantsArray = [
         {
@@ -289,7 +300,7 @@ const handlePlantsClick = (e) => {
                             <div className="product-title">{plant.name}</div>
                             <div className="product-title">{plant.description}</div>
                             <div className='product-price'>{plant.cost}</div>
-                            <button  className="product-button" onClick={() => handleAddToCart(plant)}>Add to Cart</button>
+                            <button style={{backgroundColor:alreadyInCart(plant.name)?"gray":"green"}} disabled={alreadyInCart(plant.name)? true:false} onClick={()=>handleAddToCart({name:plant.name,cost:plant.cost,image:plant.image})} className='product-button'>Add to Cart</button>
                         </div>
                         ))}
                     </div>
