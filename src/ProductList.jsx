@@ -301,7 +301,10 @@ const handlePlantsClick = (e) => {
                             <div className="product-title">{plant.name}</div>
                             <div className="product-title">{plant.description}</div>
                             <div className='product-price'>{plant.cost}</div>
-                            <button style={{backgroundColor:alreadyInCart(plant.name)?"gray":"green"}} disabled={alreadyInCart(plant.name)? true:false} onClick={()=>handleAddToCart({name:plant.name,cost:plant.cost,image:plant.image})} className='product-button'>Add to Cart</button>
+                            <button className={`product-button ${addedToCart[plant.name] ? 'added-to-cart' : ''}`}
+                                        onClick={() => handleAddToCart(plant)}
+                                    >
+                                        {addedToCart[plant.name] ? 'Added' : 'Add to Cart'}</button>
                         </div>
                         ))}
                     </div>
